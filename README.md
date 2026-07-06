@@ -65,10 +65,11 @@ The project stores data using CSV files:
 This allows data to persist between program executions.
 
  📸 Screenshots
+Welcome Banner
+<img width="1280" height="1008" alt="Invertory Tracking System - Welcome Banner" src="https://github.com/user-attachments/assets/0de73339-43c9-4c7f-9b96-d59b3e2888d6" />
+Main Menu
+<img width="1280" height="960" alt="Invertory Tracking System - Main Menu" src="https://github.com/user-attachments/assets/d061bac5-6c1d-4cda-baf5-00336bfa4763" />
 
-*(Screenshots will be added here.)*
-
----
 
  🔮 Future Improvements
 
