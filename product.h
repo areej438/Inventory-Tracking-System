@@ -7,7 +7,7 @@ private:
 	int supplierID;
 	string productName;
 	double price;
-	int quantity;
+	//int quantity;
 public:
 	//default constructor
 	product();
@@ -23,13 +23,13 @@ public:
 	void setSupplierID(int SD); 
 	void setProductName(string PN);
 	void setProductPrice(double PP); 
-	void setProductQuantity(int PQ);
+	//void setProductQuantity(int PQ);
 
 	//getter functions
 		int getProductID(); 
 		int getSupplierID(); 
 		double getProductPrice();
-	    int getProductQuantity();
+	    //int getProductQuantity();
 		string getProductName();
 		
 };

@@ -1,0 +1,28 @@
+# Visual Studio folder
+.vs/
+
+# Build output folders
+Debug/
+Release/
+x64/
+x86/
+
+# Visual Studio generated files
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.idb
+*.ipch
+
+# User-specific files
+*.user
+*.suo
+
+# Log files
+*.log
+
+# CMake build folder (if used in future)
+out/
+
+CppProperties.json

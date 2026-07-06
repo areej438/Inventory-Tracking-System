@@ -4,7 +4,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/Solution Items/">
-    <File Path="Products.csv" />
+    <File Path=".gitignore" />
   </Folder>
   <Project Path="OOP-project.vcxproj" Id="cbc297d2-c39d-49ea-a806-11da4ab4eba2" />
 </Solution>

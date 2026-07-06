@@ -3,14 +3,19 @@
 #include "validation.h"
 #include "salesOrderSubMenu.h"
 #include "SalesOrderCollection.h"
+
 #include "colors.h"
 using namespace std;
 
 
 
-void salesOrderSubMenu() {
-	salesOrderCollection so;
-	so.loadFromCSV();
+void salesOrderSubMenu(productCollection& pc,stockItemCollection& sic,salesOrderCollection& so) {
+	//salesOrderCollection so;
+	//productCollection pc;
+	//stockItemCollection sic;
+	//so.loadFromCSV();
+	//pc.loadFromCSV();
+	//sic.loadFromCSV();
 	int choice = 0;
 	do {
 		cout << PASTEL_YELLOW<< endl;
@@ -31,7 +36,8 @@ void salesOrderSubMenu() {
 		choice = intValidation("Enter your choice: ");
 		switch (choice) {
 		case 1:
-			so.addSalesOrderDetails();
+			so.showDetailsOfEnteredProducts(pc,sic);
+			so.addSalesOrderDetails(pc,sic);
 			break;
 		case 2:
 			so.displaySalesOrderDetails();

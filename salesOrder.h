@@ -7,8 +7,8 @@ class salesOrder {
 	int staffID;//we will not 
 	int quantity;
 	double price;
-	double totalAmount;//we will not use it
-	string salesDate; // learn about date data type for salesDate
+	double totalAmount;
+	string salesDate; 
 public:
 	//default constructor
 	salesOrder();

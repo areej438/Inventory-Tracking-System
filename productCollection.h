@@ -14,10 +14,14 @@ public:
 	void updateProduct();
 	void findProductByID();
 	int returnIndexOfProductId(int id);//helper functiom
+	int getProductIdAtIndex(int index);
+	string getProductNameAtIndex(int index);
+	int getProductCount();
+
 //function for file handling
 	void loadFromCSV();
 	void saveToFile();
-	
+	bool productExist(int id);
 	
 
 };

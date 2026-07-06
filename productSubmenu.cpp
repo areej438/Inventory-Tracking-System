@@ -10,9 +10,9 @@ using namespace std;
 
 
 // product sub menu funtion define
-void productSubMenu() {
-	productCollection pc;
-	pc.loadFromCSV();
+void productSubMenu(productCollection& pc) {
+	//productCollection pc;
+	//pc.loadFromCSV();
 	int choice = 0;
 	do {
 		cout<<PASTEL_YELLOW;

@@ -9,15 +9,15 @@ class stockItem{
 	int supplierID;
 	string purchaseDate;
 	string expiryDate;
-	string stockStatus;
-	string stockItemName;
+	//string stockStatus;
+	//string stockItemName;
 public:
 
 	//default constructor
 	stockItem();
 
 	//copy constructor 
-	stockItem(const stockItem& obj); //you can chnage name of obj before submission
+	stockItem(const stockItem& obj); 
 
 	//destructor
 	~stockItem();
@@ -30,9 +30,9 @@ public:
 	void setStockQuantity(int Sq);
 	void setPurchasingDate(string pDate);
 	void setProductExpiryDate(string pExDate);
-	void setstockStauts(string sStatus);
+	//void setstockStauts(string sStatus);
 	void setPurchaseID(int Pid);
-	void setStockItemName(string n);
+	//void setStockItemName(string n);
 
 	//getter functions
 
@@ -42,7 +42,7 @@ public:
 	int getStockQuantity();
 	string getPurchasingDate();
 	string getProductExpiryDate();
-	string getStockStatus();
-	string getStockItemName();
+	//string getStockStatus();
+	//string getStockItemName();
 	int getPurchaseID();
 };

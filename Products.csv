@@ -1,11 +1,5 @@
-Product ID,Product Name,Supplier ID,Product Quantity,Product Price
-0,new shampoo,11,11,22
-101,load function call change,102,11,22
-11,ddd,22,7,77
-0,new shampoo,11,11,22
-11,qqqqqq,33,111,11
-1,hj jj,3,44,7
-1,soap,12,5,4000
-1,ww,2,8,11
-11,ee,22,3,33
-22,oil,0,9,222.99
+Product ID,Product Name,Supplier ID,Product Price
+1,oil,11,122
+2,water,33,11
+3,bread,33,33
+4,milk,11,90

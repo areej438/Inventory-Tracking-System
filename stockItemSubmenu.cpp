@@ -8,9 +8,11 @@
 using namespace std;
 
 
-void stockItemSubMenu() {
-	stockItemCollection sic;
-	sic.loadFromCSV();
+void stockItemSubMenu(productCollection& pc,stockItemCollection& sic) {//i added argumnt in this an .h file also
+	//stockItemCollection sic;
+	//productCollection pc;
+	//pc.loadFromCSV();
+	//sic.loadFromCSV();
 	int choice = 0;
 	do {
 		cout << PASTEL_YELLOW;
@@ -34,7 +36,8 @@ void stockItemSubMenu() {
 		 choice = intValidation("Enter your choice: ");
 		switch (choice) {
 		case 1:
-			sic.addStockItem();
+			sic.showDetailsOfEnteredProducts(pc);
+			sic.addStockItem(pc);
 			break;
 		case 2:
 			sic.displayStockItemDetails();

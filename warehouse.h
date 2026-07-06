@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "stockItem.h" //for composition
+#include "stockItem.h" 
 using namespace std;
 class warehouse {
 	int warehouseID;

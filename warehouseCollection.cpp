@@ -205,9 +205,9 @@ void warehouseCollection::removeWarehouse() {
 }
 
 //function for file reading
-void warehouseCollection::loadFromCSV() {//sir uses parameter here bcz if you have more than one file 
-    count = 0;//this count is added on chatgpt suggestion why?   //then you can add any filename insted hard coding but we have only 2 simple files
-    ifstream rfile("warehouse.csv"); //same file name check why?
+void warehouseCollection::loadFromCSV() { 
+    count = 0;
+    ifstream rfile("warehouse.csv"); 
     if (!rfile) {
         cout << "File is not open " << endl;
         return;
@@ -244,10 +244,10 @@ void warehouseCollection::loadFromCSV() {//sir uses parameter here bcz if you ha
 
 //write into file function
 void warehouseCollection::saveToFile() {
-    ofstream outFile("warehouse.csv");//csv is liyy qk is ny dobara load bhi to hona hy us k liyr usy comma separated values chaoye
+    ofstream outFile("warehouse.csv");
     if (!outFile) {
         cout << "file is not opened" << endl;
-        return;//chexk why 
+        return;
     }
     outFile << "Warehouse ID,Staff ID,Warehouse Name,Warehouse Location,Warehouse Capacity" << endl;
     if (count == 0) {

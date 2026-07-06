@@ -14,7 +14,7 @@ salesOrder::salesOrder() {
 }
 
 //defining copy constructor
-salesOrder::salesOrder(const salesOrder& existingSalesOBj) { // for learning change this before submission
+salesOrder::salesOrder(const salesOrder& existingSalesOBj) { 
 	salesID = existingSalesOBj.salesID;
 	productID = existingSalesOBj.productID;
 	staffID = existingSalesOBj.staffID;

@@ -10,7 +10,7 @@ stockItem::stockItem() {
 	 supplierID = 0;
 	 purchaseDate = "none"; // you can check for more proffesional word
 	 expiryDate = "none";
-	 stockStatus = "none";
+	 //stockStatus = "none";
 }
 
 //defining copy constructor 
@@ -22,7 +22,7 @@ stockItem::stockItem(const stockItem& obj) { //you can change the name of obj
 	supplierID = obj.supplierID;
 	purchaseDate = obj.purchaseDate; 
 	expiryDate = obj.expiryDate;
-	stockStatus = obj.stockStatus;
+	//stockStatus = obj.stockStatus;
 }
 
 //defining destructor
@@ -47,15 +47,15 @@ void stockItem::setStockQuantity(int Sq) {
 void stockItem::setPurchasingDate(string pDate) {
 	purchaseDate = pDate;
 }
-void stockItem::setStockItemName(string sn) {
-	stockItemName = sn;
-}
+//void stockItem::setStockItemName(string sn) {
+//	stockItemName = sn;
+//}
 void stockItem::setProductExpiryDate(string pExDate) {
 	expiryDate = pExDate;
 }
-void stockItem::setstockStauts(string sStatus) {
-	stockStatus = sStatus;
-}
+//void stockItem::setstockStauts(string sStatus) {
+//	stockStatus = sStatus;
+//}
 void stockItem::setPurchaseID(int Pid) {
 	purchaseID = Pid;
 }
@@ -76,15 +76,15 @@ int stockItem::getStockQuantity() {
 string stockItem::getPurchasingDate() {
 	return purchaseDate;
 }
-string stockItem::getStockItemName() {
-	return stockItemName;
-}
+//string stockItem::getStockItemName() {
+//	return stockItemName;
+//}
 string stockItem::getProductExpiryDate() {
 	return expiryDate;
 }
-string stockItem::getStockStatus() {
-	return stockStatus;
-}
+//string stockItem::getStockStatus() {
+//	return stockStatus;
+//}
 int stockItem::getPurchaseID() {
 	return purchaseID;
 }

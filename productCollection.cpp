@@ -1,7 +1,7 @@
 #include <iostream>
 #include "validation.h"
 #include <sstream>//stringstraem is a class belong to it
-#include <fstream>//fot file handling
+#include <fstream>
 #include "productCollection.h"
 #include "colors.h"
 using namespace std;
@@ -54,17 +54,24 @@ void productCollection::addProduct() {
 	double p;
 	p = doubleValidation("Enter Product Price: ");
 	products[count].setProductPrice(p);
-	//add quantity
-	int q;
-	q = intValidation("Enter Product Quantity: ");
-	products[count].setProductQuantity(q);
-	//increase count at the end
+	
 	count++;
 }
+//for showing list in stock collection
+int productCollection::getProductIdAtIndex(int index) {
+
+	 return products[index].getProductID();
+}
+string productCollection::getProductNameAtIndex(int index) {
+
+	return products[index].getProductName();
+}
+int productCollection::getProductCount()
+{
+	return count;
+}
 void productCollection::displayProduct() {
-	//epmty product checking condition, y is liye qk jb array create hwa to 
-	// memory m space bn gi hy default constructor ki yhan show is liye ni ho rhi qk hum loop count 
-	// lga rhy han count hi zero ho ga to loop ni chly ga
+	
 	if (count == 0) {
 		cout << PASTEL_RED;
 		cout << "NO Product is Entered yet!!" <<RESET<< endl;
@@ -81,7 +88,6 @@ void productCollection::displayProduct() {
 		cout << PASTEL_BROWN<<  "Product ID      : " << PASTEL_BEIGE << products[i].getProductID() << RESET<<endl;
 		cout << PASTEL_BROWN << "Product Nmae    : " << PASTEL_BEIGE << products[i].getProductName() << RESET<<endl;
 		cout << PASTEL_BROWN << "Supplier ID     : " << PASTEL_BEIGE << products[i].getSupplierID() << RESET<<endl;
-		cout << PASTEL_BROWN << "Product Quantity: " << PASTEL_BEIGE << products[i].getProductQuantity() << RESET<< endl;
 		cout << PASTEL_BROWN << "Product Price   : " << PASTEL_BEIGE << products[i].getProductPrice() << RESET<< endl;
 		cout << PASTEL_BEIGE<<"-------------------------------------" << endl;
 	}
@@ -89,20 +95,19 @@ void productCollection::displayProduct() {
 
 void productCollection::findProductByID() {
 	//condition if no product is enter but user still search
-	if (count == 0) {//why else is not running when without this condition ans is loop will not run
+	if (count == 0) {
 		cout << PASTEL_RED << "NO Product is Entered Yet!!" << endl;
 		return;
 	}
 	int searchID;
 	searchID = intValidation("Enter Product ID: ");
 	bool productFound = false;//flag will solve the problem
-	                         //If first element doesn’t match → it immediately says “Not found”
-	                         // (never check index 1)It never checks remaining elements
+	                        
 	for (int i = 0; i < count; i++) {
 		
 		if (searchID == products[i].getProductID()) {
 			productFound = true;
-	//addproduct y phir view product ka funct ider call ni ho rha wo kh rha hy y function product class ka ni hy
+
 			cout << PASTEL_YELLOW << BOLD;
 			cout << "-------------------------------" << endl;
 			cout << PASTEL_LAVENDER;
@@ -113,7 +118,7 @@ void productCollection::findProductByID() {
 			cout << PASTEL_BROWN << "Product ID      : " << PASTEL_BEIGE << products[i].getProductID() << RESET << endl;
 			cout << PASTEL_BROWN << "Product Nmae    : " << PASTEL_BEIGE << products[i].getProductName() << RESET << endl;
 			cout << PASTEL_BROWN << "Supplier ID     : " << PASTEL_BEIGE << products[i].getSupplierID() << RESET << endl;
-			cout << PASTEL_BROWN << "Product Quantity: " << PASTEL_BEIGE << products[i].getProductQuantity() << RESET << endl;
+			//cout << PASTEL_BROWN << "Product Quantity: " << PASTEL_BEIGE << products[i].getProductQuantity() << RESET << endl;
 			cout << PASTEL_BROWN << "Product Price   : " << PASTEL_BEIGE << products[i].getProductPrice() << RESET << endl;
 			cout << PASTEL_BEIGE << "       ----------------------" << endl;
 			
@@ -138,6 +143,9 @@ int productCollection::returnIndexOfProductId(int id) {
 		}	
 	}
 	return -1;//when not found
+}
+bool productCollection:: productExist(int id) {
+	return returnIndexOfProductId(id) != -1;
 }
 void productCollection::updateProduct() {
 	if (count == 0) {
@@ -178,10 +186,6 @@ void productCollection::updateProduct() {
 	price = doubleValidation("Enter New Product Price: ");
 	products[index].setProductPrice(price);
 	
-
-	int qty;
-	qty = intValidation("Enter New Quantity: ");
-	products[index].setProductQuantity(qty);
 	
 
 	cout <<PASTEL_GREEN<< "Product Details updated successfully!" << endl;
@@ -213,7 +217,7 @@ void productCollection::removeProduct() {
 
 //function for file reading
 void productCollection:: loadFromCSV() {//sir uses parameter here bcz if you have more than one file 
-	count = 0;//this count is added on chatgpt suggestion why?   //then you can add any filename insted hard coding but we have only 2 simple files
+	count = 0; 
 	ifstream rfile("Products.csv"); //same file name check why?
 	if (!rfile) {
 		cout << "File is not open " << endl;
@@ -221,10 +225,7 @@ void productCollection:: loadFromCSV() {//sir uses parameter here bcz if you hav
 	}
 	string line;
 	getline(rfile, line);
-	//int position = 0//i am not doing it bcz better appraoch is available
-	//string line;
-	//position = line.find(",");
-	//line.substr(0, position);
+	
 	while (getline(rfile,line)) {
 		stringstream ss(line);
 		string idstr;
@@ -235,9 +236,7 @@ void productCollection:: loadFromCSV() {//sir uses parameter here bcz if you hav
 		string Sidstr;
 		getline(ss, Sidstr, ',');
 		int Sid = stoi(Sidstr);
-		string qty;
-		getline(ss, qty, ',');
-		int Pqty = stoi(qty);
+		
 		string price;
 		getline(ss, price, ',');
 		double pric = stod(price);
@@ -246,7 +245,7 @@ void productCollection:: loadFromCSV() {//sir uses parameter here bcz if you hav
 		products[count].setProductName(name);
 		products[count].setSupplierID(Sid);
 		products[count].setProductPrice(pric);
-		products[count].setProductQuantity(Pqty);
+		//products[count].setProductQuantity(Pqty);
 
 		count++;
 	}
@@ -255,12 +254,12 @@ void productCollection:: loadFromCSV() {//sir uses parameter here bcz if you hav
 
 //write into file function
 void productCollection::saveToFile() {
-	ofstream outFile("Products.csv");//csv is liyy qk is ny dobara load bhi to hona hy us k liyr usy comma separated values chaoye
+	ofstream outFile("Products.csv");
 	if (!outFile) {
 		cout << "file is not opened" << endl;
 		return;//chexk why 
 	}
-	outFile << "Product ID,Product Name,Supplier ID,Product Quantity,Product Price" << endl;
+	outFile << "Product ID,Product Name,Supplier ID,Product Price" << endl;
 	if (count == 0) {
 		cout << PASTEL_RED << "NO Products are entered yet,Nothing to write in file!!" << endl;
 		outFile.close();
@@ -268,7 +267,7 @@ void productCollection::saveToFile() {
 	}
 	for (int i = 0; i < count; i++) {
 		outFile << products[i].getProductID()<<"," << products[i].getProductName() << "," << products[i].getSupplierID()
-			<< "," << products[i].getProductQuantity() << "," << products[i].getProductPrice() << endl;
+			<< "," << products[i].getProductPrice() << endl;
 	}
 	cout <<PASTEL_GREEN<< "Products detail are written succesfully" << endl;
 	outFile.close();

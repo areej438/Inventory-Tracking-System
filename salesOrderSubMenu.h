@@ -2,7 +2,7 @@
 
 
 #include "salesOrder.h"
-#include "salesOrderCollection.h" //i made this change in the last minutes stockitem collection was there
+#include "salesOrderCollection.h" 
 
-void salesOrderSubMenu();
+void salesOrderSubMenu(productCollection& pc,stockItemCollection& sic,salesOrderCollection& so);
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <iomanip>
 #include "validation.h"
 #include "stockItemCollection.h"
 #include "colors.h"
@@ -11,8 +12,8 @@ stockItemCollection::stockItemCollection() {
 	count = 0;
 }
 
-void stockItemCollection::addStockItem() {
-	//storage full checking   i can't do it in subemnu file because count is private
+void stockItemCollection::addStockItem(productCollection& pc) {
+	//storage full checking  
 	if (count >= 100) {
 		cout << PASTEL_GREEN;
 		cout << "Storage is Full!!" << RESET << endl;
@@ -36,28 +37,29 @@ void stockItemCollection::addStockItem() {
 
 	int pid;
 	 pid = intValidation("Enter Product ID: ");
-	stockItems[count].setProductID(pid);//we cannot directly sign in because products[count] is acting as obj
-
+	 if (!pc.productExist(pid)) {
+		 cout << PASTEL_RED << "product ID does not exist!!" << RESET << endl;
+		 return;
+	 }
+	 //for not entering duplicate product id
+	 if (returnIndexOfProductIdInStockCollection(pid) != -1) {
+		 cout << PASTEL_RED << "This Stock Item already exist!! " << RESET << endl;
+		 return;
+	 }
+	stockItems[count].setProductID(pid);
+	
 	//add supplier id
 	int sid;
 	sid = intValidation("Enter Supplier ID: ");
 	stockItems[count].setSupplierID(sid);
 
-	//add product name
-	string n;
-	cout << PASTEL_BROWN;
-	cout << "Enter Stock Item Name: ";
-	cout << PASTEL_BEIGE;
-	cin.ignore();
-	getline(cin, n);
-	cout << RESET;
-	stockItems[count].setStockItemName(n);//i realized name hi ni hy item ka
 
 	//add expiry date
 	string d;
 	cout << PASTEL_BROWN;
 	cout << "Enter Expiry Date: ";
 	cout << PASTEL_BEIGE;
+	cin.ignore();
 	getline(cin, d);
 	cout << RESET;
 	stockItems[count].setProductExpiryDate(d);
@@ -82,10 +84,28 @@ void stockItemCollection::addStockItem() {
 	//increase count at the end
 	count++;
 }
+void stockItemCollection::showDetailsOfEnteredProducts(productCollection& pc) {
+	cout << PASTEL_BROWN << endl;
+	cout<<"   Added Product Details"<< endl;  
+	cout << "------------------------------" << endl;
+	cout << "Product ID    Item Name   " << endl;
+
+	
+	for (int i = 0; i < pc.getProductCount(); i++) {
+		
+		cout << PASTEL_BROWN <<"   "<<
+	   pc.getProductIdAtIndex(i) <<setw(20) << pc.getProductNameAtIndex(i) << endl;
+		
+		
+	}
+	cout << "-----------------------------" <<RESET<< endl;
+}
+//for getting qty of stock item will show in list before adding sales order details
+int stockItemCollection::getStockQtyAtIndex(int i) {
+	return stockItems[i].getStockQuantity();
+}
 void stockItemCollection::displayStockItemDetails() {
-	//epmty product checking condition, y is liye qk jb array create hwa to 
-	// memory m space bn gi hy default constructor ki yhan show is liye ni ho rhi qk hum loop count 
-	// lga rhy han count hi zero ho ga to loop ni chly ga
+	
 	if (count == 0) {
 		cout << PASTEL_RED;
 		cout << "NO Stock Item is Entered yet!!" << RESET << endl;
@@ -101,7 +121,6 @@ void stockItemCollection::displayStockItemDetails() {
 	for (int i = 0; i < count; i++) {
 		cout << PASTEL_BROWN << "Stock Item ID      : " << PASTEL_BEIGE << stockItems[i].getStockItemID() << RESET << endl;
 		cout << PASTEL_BROWN << "Product ID         : " << PASTEL_BEIGE << stockItems[i].getProductID() << RESET << endl;
-		cout << PASTEL_BROWN << "Stock Item Name    : " << PASTEL_BEIGE << stockItems[i].getStockItemName() << RESET << endl;
 		cout << PASTEL_BROWN << "Supplier ID        : " << PASTEL_BEIGE << stockItems[i].getSupplierID() << RESET << endl;
 		cout << PASTEL_BROWN << "Purchase ID        : " << PASTEL_BEIGE << stockItems[i].getPurchaseID() << RESET << endl;
 		cout << PASTEL_BROWN << "Purchase Date      : " << PASTEL_BEIGE << stockItems[i].getPurchasingDate() << RESET << endl;
@@ -113,7 +132,7 @@ void stockItemCollection::displayStockItemDetails() {
 
 void stockItemCollection::findStockItemByID() {
 	//condition if no product is enter but user still search
-	if (count == 0) {//why else is not running when without this condition ans is loop will not run
+	if (count == 0) {
 		cout << PASTEL_RED << "NO Stock Item is Entered Yet!!" << endl;
 		return;
 	}
@@ -121,13 +140,12 @@ void stockItemCollection::findStockItemByID() {
 	searchID = intValidation("Enter Stock Item ID: ");
 	
 	bool stockItemFound = false;//flag will solve the problem
-	//If first element doesn’t match → it immediately says “Not found”
-	// (never check index 1)It never checks remaining elements
+	
 	for (int i = 0; i < count; i++) {
 
 		if (searchID == stockItems[i].getStockItemID()) {
 			stockItemFound = true;
-			//addproduct y phir view product ka funct ider call ni ho rha wo kh rha hy y function product class ka ni hy
+			
 			cout << PASTEL_YELLOW << BOLD;
 			cout << "---------------------------------------" << endl;
 			cout << PASTEL_LAVENDER;
@@ -137,7 +155,6 @@ void stockItemCollection::findStockItemByID() {
 			cout << endl;
 			cout << PASTEL_BROWN << "Stock Item ID      : " << PASTEL_BEIGE << stockItems[i].getStockItemID() << RESET << endl;
 			cout << PASTEL_BROWN << "Product ID         : " << PASTEL_BEIGE << stockItems[i].getProductID() << RESET << endl;
-			cout << PASTEL_BROWN << "Stock Item Name    : " << PASTEL_BEIGE << stockItems[i].getStockItemName() << RESET << endl;
 			cout << PASTEL_BROWN << "Supplier ID        : " << PASTEL_BEIGE << stockItems[i].getSupplierID() << RESET << endl;
 			cout << PASTEL_BROWN << "Purchase ID        : " << PASTEL_BEIGE << stockItems[i].getPurchaseID() << RESET << endl;
 			cout << PASTEL_BROWN << "Purchase Date      : " << PASTEL_BEIGE << stockItems[i].getPurchasingDate() << RESET << endl;
@@ -166,6 +183,35 @@ int stockItemCollection::returnIndexOfStockItemId(int id) {
 	}
 	return -1;//when not found
 }
+//find index of that product id in stockItem collection 
+
+int stockItemCollection::returnIndexOfProductIdInStockCollection(int pid) {
+	int index = -1;
+	for (int i = 0; i < count; i++) {
+		if (pid == stockItems[i].getProductID()) {
+			return i;
+		}	
+	}
+	return -1;//when not found
+}
+//helper for getting quantitiy
+int stockItemCollection::quantityOfStockItem(int pid){
+	int index = returnIndexOfProductIdInStockCollection(pid);
+	if (index == -1) {
+		cout << "Product ID does not exist" << endl;
+		return -1;
+	}
+	int qty = stockItems[index].getStockQuantity();
+	return qty;
+}
+
+void stockItemCollection::updateStockItemQty(int pid, int remainingQty) {
+	int index = returnIndexOfProductIdInStockCollection(pid);
+	cout << "before:" << stockItems[index].getStockQuantity() << endl;
+	stockItems[index].setStockQuantity(remainingQty);
+	cout << "after:" << stockItems[index].getStockQuantity() << endl;
+}
+
 void stockItemCollection::updateStockItem() {
 	if (count == 0) {
 		cout << PASTEL_RED;
@@ -180,7 +226,7 @@ void stockItemCollection::updateStockItem() {
 		cout << PASTEL_RED << "Stock Item ID does not exist!!" << endl;
 		return;
 	}
-	//can we write this all in else of above if?
+	
 	//add updated info
 
 	int stid;
@@ -195,14 +241,6 @@ void stockItemCollection::updateStockItem() {
 	Sid = intValidation("Enter new Supplier ID: ");
 	stockItems[index].setSupplierID(Sid);
 
-	string n;
-	cout << PASTEL_BROWN;
-	cout << "Enter New Stock Item Name: ";
-	cout << PASTEL_BEIGE;
-	cin.ignore();
-	getline(cin, n);
-	cout << RESET;
-	stockItems[index].setStockItemName(n);
 
 
 	int qty;
@@ -253,19 +291,18 @@ void stockItemCollection::removeStockItem() {
 		return;
 	}
 	//shift your array
-	for (int i = index; i < count - 1; i++) {//start from index will start from 
-		//defected part still get info for understanding
+	for (int i = index; i < count - 1; i++) {
 		stockItems[i] = stockItems[i + 1];
 
 	}
-	count--;//outside loop why look at it properly
+	count--;
 	cout << PASTEL_GREEN << "Your Selected ID Details are removed Successfully!!" << endl;
 }
 
 //function for file reading
-void stockItemCollection::loadFromCSV() {//sir uses parameter here bcz if you have more than one file 
-	count = 0;//this count is added on chatgpt suggestion why?   //then you can add any filename insted hard coding but we have only 2 simple files
-	ifstream rfile("StockItem.csv"); //same file name check why?
+void stockItemCollection::loadFromCSV() {
+	count = 0;
+	ifstream rfile("StockItem.csv"); 
 	if (!rfile) {
 		cout << "File is not open " << endl;
 		return;
@@ -280,8 +317,8 @@ void stockItemCollection::loadFromCSV() {//sir uses parameter here bcz if you ha
 		string Pidstr;
 		getline(ss, Pidstr, ',');
         int Productid = stoi(Pidstr);
-		string name;
-		getline(ss, name, ',');
+		//string name;
+		//getline(ss, name, ',');
 		string sid;
 		getline(ss, sid, ',');
 		int Suid = stoi(sid);
@@ -298,7 +335,7 @@ void stockItemCollection::loadFromCSV() {//sir uses parameter here bcz if you ha
 		//now assign values to suitable count
 		stockItems[count].setstockItemID(SIid);
 		stockItems[count].setProductID(Productid);
-		stockItems[count].setStockItemName(name);
+		
 		stockItems[count].setSupplierID(Suid);
 		stockItems[count].setPurchaseID(Puid);
 		stockItems[count].setPurchasingDate(puDate);
@@ -313,19 +350,19 @@ void stockItemCollection::loadFromCSV() {//sir uses parameter here bcz if you ha
 
 //write into file function
 void stockItemCollection::saveToFile() {
-	ofstream outFile("StockItem.csv");//csv is liyy qk is ny dobara load bhi to hona hy us k liyr usy comma separated values chaoye
+	ofstream outFile("StockItem.csv");
 	if (!outFile) {
 		cout << "file is not opened" << endl;
-		return;//chexk why 
+		return;
 	}
-	outFile << "StockItem ID,Product ID,StockItem Name,Supplier ID,Purchase ID,Purchase Date,Stock Quantity,Expiry Date" << endl;
+	outFile << "StockItem ID,Product ID,Supplier ID,Purchase ID,Purchase Date,Stock Quantity,Expiry Date" << endl;
 	if (count == 0) {
 		cout << PASTEL_RED << "NO Products are entered yet,Nothing to write in file!!" << endl;
 		outFile.close();
 		return;
 	}
 	for (int i = 0; i < count; i++) {
-		outFile << stockItems[i].getStockItemID() << "," << stockItems[i].getProductID() << "," << stockItems[i].getStockItemName()
+		outFile << stockItems[i].getStockItemID() << "," << stockItems[i].getProductID()
 			<< "," << stockItems[i].getSupplierID() << "," <<stockItems[i].getPurchaseID()<<"," << stockItems[i].getPurchasingDate()
 			<<"," << stockItems[i].getStockQuantity()<<"," << stockItems[i].getProductExpiryDate() << endl;
 	}

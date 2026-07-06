@@ -13,9 +13,5 @@ int main()
 	beforeMainmenuMsg();
 	welcomeBanner();
 	mainMenu();
-		// for checking
-	//product p1;
-	//product p2;
-	//salesOrder so1;
-	//stockItem si1;
+		
 }

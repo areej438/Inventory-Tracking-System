@@ -1,18 +1,21 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 #include "salesOrderCollection.h"
+//#include "productCollection.h"
 #include "colors.h"
 #include "validation.h"
 using namespace std;
+
 
 //default define 
 salesOrderCollection::salesOrderCollection() {
 	count = 0;
 }
 
-void salesOrderCollection::addSalesOrderDetails() {
-	//storage full checking   i can't do it in subemnu file because count is private
+void salesOrderCollection::addSalesOrderDetails(productCollection& pc, stockItemCollection& sic) {
+	//storage full checking  
 	if (count >= 100) {
 		cout << PASTEL_GREEN;
 		cout << "Storage is Full!!" << RESET << endl;
@@ -36,19 +39,19 @@ void salesOrderCollection::addSalesOrderDetails() {
 
 	int pid;
 	pid = intValidation("Enter Product ID: ");
-	saleOrders[count].setProductID(pid);//we cannot directly sign in because products[count] is acting as obj
-
+	//for checking the same product id or for matching you can say
+	if (!pc.productExist(pid)) {
+		cout << PASTEL_RED << "product ID does not exist!!" << RESET << endl;
+		return;
+	}
+	saleOrders[count].setProductID(pid);
+	
 	//add product price
 
 	double p;
 	p = doubleValidation("Enter Product Price: ");
 	saleOrders[count].setSalesPrice(p);
-	//add quantity
-	int q;
-	q = intValidation("Enter Product Quantity: ");
-	saleOrders[count].setQuantity(q);
 
-	//add expiry date
 	string d;
 	cout << PASTEL_BROWN;
 	cout << "Enter Sales Date: ";
@@ -57,13 +60,54 @@ void salesOrderCollection::addSalesOrderDetails() {
 	getline(cin, d);
 	cout << RESET;
 	saleOrders[count].setSalesDate(d);
+	//add quantity
+	int q;
+	q = intValidation("Enter Product Quantity: ");
+	//if enough stock is available or not?
+	if (q > sic.quantityOfStockItem(pid)) {
+		cout <<PASTEL_RED<< "stock is not available" << endl;
+		return;
+	}
+	saleOrders[count].setQuantity(q);
+	//subtraction,to get remaing qty which will be used for updation of stock qty also
+	int remainingStockQty = sic.quantityOfStockItem(pid) - q;
+	sic.updateStockItemQty(pid, remainingStockQty);
+	sic.saveToFile();//when sale happens it store in RAM (subtraction of product) not in CSV so that after
+	                //another run in list it shows previous one after svaing in csv proble will be solved
+	//add expiry date
+	
 	//increase count at the end
 	count++;
 }
+
+void salesOrderCollection::showDetailsOfEnteredProducts(productCollection& pc,stockItemCollection& sic) {
+	cout << PASTEL_BROWN << endl;
+	cout << "   Added Product Details" << endl;
+	cout << "------------------------------" << endl;
+	cout << "Product ID    Item Name   Quantity" << endl;
+
+	//pc.getProductList();  this will cause formatting problem 
+	//for (int i = 0; i < count; i++) {
+	//	cout<<"      " << stockItems[i].getStockQuantity() << endl;
+	//}
+	//cout << RESET << endl;
+	for (int i = 0; i < pc.getProductCount(); i++) {
+		//int index = pc.returnIndexOfProductId(i);this will gice the index of 0,1 bcz 'i' is acting as product id here
+		int prdctId = pc.getProductIdAtIndex(i);//this will give index of that prdct id which is at index (i) 0,1,..
+		int stockqtyIndx = sic.returnIndexOfProductIdInStockCollection(prdctId);
+		cout << PASTEL_BROWN << "   " <<
+			pc.getProductIdAtIndex(i) << setw(20) << pc.getProductNameAtIndex(i) << setw(16);
+		if (stockqtyIndx == -1) {
+			cout << "not added"<<endl;
+		}
+		else { cout << sic.getStockQtyAtIndex(stockqtyIndx) << endl; }
+
+
+	}
+	cout << "-----------------------------" << RESET << endl;
+}
 void salesOrderCollection::displaySalesOrderDetails() {
-	//epmty product checking condition, y is liye qk jb array create hwa to 
-	// memory m space bn gi hy default constructor ki yhan show is liye ni ho rhi qk hum loop count 
-	// lga rhy han count hi zero ho ga to loop ni chly ga
+	//epmty product checking condition
 	if (count == 0) {
 		cout << PASTEL_RED;
 		cout << "NO Sales Order is Entered yet!!" << RESET << endl;
@@ -88,20 +132,18 @@ void salesOrderCollection::displaySalesOrderDetails() {
 
 void salesOrderCollection::findSalesOrderByID() {
 	//condition if no product is enter but user still search
-	if (count == 0) {//why else is not running when without this condition ans is loop will not run
+	if (count == 0) {
 		cout << PASTEL_RED << "NO Sale Order Detail is Entered Yet!!" << endl;
 		return;
 	}
 	int searchID;
-	searchID = intValidation("Enter Product ID: ");
-	bool salesOrderFound = false;//flag will solve the problem
-	//If first element doesn’t match → it immediately says “Not found”
-	// (never check index 1)It never checks remaining elements
+	searchID = intValidation("Enter Sales Order ID: ");
+	bool salesOrderFound = false;
 	for (int i = 0; i < count; i++) {
 
 		if (searchID == saleOrders[i].getSalesID()) {
 			salesOrderFound = true;
-			//addproduct y phir view product ka funct ider call ni ho rha wo kh rha hy y function product class ka ni hy
+			
 			cout << PASTEL_YELLOW << BOLD;
 			cout << "-------------------------------" << endl;
 			cout << PASTEL_LAVENDER;
@@ -120,7 +162,7 @@ void salesOrderCollection::findSalesOrderByID() {
 		}
 
 	}
-	if (!salesOrderFound) {//after loop must
+	if (!salesOrderFound) {
 		cout << PASTEL_RED;
 		cout << "This Sales ID does not exist!!" << RESET << endl;
 		return;
@@ -135,8 +177,11 @@ int salesOrderCollection::returnIndexOfSalesOrderId(int id) {
 			return i;
 		}
 	}
-	return -1;//when not found
+	return -1;
 }
+
+
+
 void salesOrderCollection::updateSalesOrderDetails() {
 	if (count == 0) {
 		cout << PASTEL_RED;
@@ -151,7 +196,7 @@ void salesOrderCollection::updateSalesOrderDetails() {
 		cout << PASTEL_RED << "Sales Order ID does not exist!!" << endl;
 		return;
 	}
-	//can we write this all in else of above if?
+	
 	//add updated info
 
 	int soid;
@@ -198,19 +243,18 @@ void salesOrderCollection::removeSalesOrderDetails() {
 		return;
 	}
 	//shift your array
-	for (int i = index; i < count - 1; i++) {//start from index will start from 
-		//defected part still get info for understanding
+	for (int i = index; i < count - 1; i++) {
 		saleOrders[i] = saleOrders[i + 1];
 
 	}
-	count--;//outside loop why look at it properly
+	count--;
 	cout << PASTEL_GREEN << "Sales Order Details are removed Successfully!!" << endl;
 }
 
 //function for file reading
-void salesOrderCollection::loadFromCSV() {//sir uses parameter here bcz if you have more than one file 
-	count = 0;//this count is added on chatgpt suggestion why?   //then you can add any filename insted hard coding but we have only 2 simple files
-	ifstream rfile("SalesOrder.csv"); //same file name check why?
+void salesOrderCollection::loadFromCSV() {
+	count = 0;
+	ifstream rfile("SalesOrder.csv"); 
 	if (!rfile) {
 		cout << "File is not open " << endl;
 		return;
@@ -248,7 +292,7 @@ void salesOrderCollection::loadFromCSV() {//sir uses parameter here bcz if you h
 
 //write into file function
 void salesOrderCollection::saveToFile() {
-	ofstream outFile("SalesOrder.csv");//csv is liyy qk is ny dobara load bhi to hona hy us k liyr usy comma separated values chaoye
+	ofstream outFile("SalesOrder.csv");
 	if (!outFile) {
 		cout << "file is not opened" << endl;
 		return;//chexk why 

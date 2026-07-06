@@ -8,7 +8,7 @@ using namespace std;
 		supplierID = 0;
 		productName = "unknown";
 		price = 0;
-		quantity = 0;
+		//quantity = 0;
 	}
 
 	//copy constructor
@@ -17,7 +17,7 @@ using namespace std;
 		supplierID = existingObj.supplierID;
 		productName = existingObj.productName;
 		price = existingObj.price;
-		quantity = existingObj.quantity;
+		//quantity = existingObj.quantity;
 	}
 
 	//destructor 
@@ -39,9 +39,9 @@ using namespace std;
 	void  product::setProductPrice(double PP) {
 		price = PP;
 	}
-	void  product::setProductQuantity(int PQ) {
-		quantity = PQ;
-	}
+	//void  product::setProductQuantity(int PQ) {
+	//	quantity = PQ;
+	//}
 
 	//getter functions
 	int product::getProductID() {
@@ -53,9 +53,9 @@ using namespace std;
 	double  product::getProductPrice() {
 		return price;
 	}
-	int product::getProductQuantity() {
-		return quantity;
-	}
+	//int product::getProductQuantity() {
+	//	return quantity;
+	//}
 	string  product::getProductName() {
 		return productName;
 	}
